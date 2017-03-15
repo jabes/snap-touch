@@ -5,26 +5,5 @@ This slider calculates velocity to decelerate when flicked and will snap to an e
 ### Features
 
 - No dependencies
+- Modern JavaScript (ES6)
 - IE9+ compatible
-
-### Example
-
-```HTML
-<div id="slider" class="slider">
-    <div class="slides">
-        <div class="slide"><a href="#"><span class="number">1</span></a></div>
-        <div class="slide"><a href="#"><span class="number">2</span></a></div>
-        <div class="slide"><a href="#"><span class="number">3</span></a></div>
-    </div>
-</div>
-```
-
-<script src="slider.js"></script>
-<script>
-    (function () {
-        const slider = new Slider('slider');
-    })();
-</script>
-
-
-
