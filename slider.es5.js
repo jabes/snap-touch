@@ -471,7 +471,7 @@ var Slider = function () {
     return Slider;
 }();
 
-if (typeof exports === 'object' && typeof module !== 'undefined') {
+if (typeof module === 'object' && module.exports) {
     module.exports = Slider;
 }
 
