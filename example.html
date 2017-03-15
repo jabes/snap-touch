@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Touchy Slidey</title>
+    <style>
+        html {
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after {
+            box-sizing: inherit;
+        }
+
+        .slider {
+            position: relative;
+            overflow: hidden;
+            padding-left: 50%;
+            padding-right: 50%;
+        }
+
+        .slider::before, .slider::after {
+            content: "";
+            pointer-events: none;
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 5%;
+            height: 100%;
+        }
+
+        .slider::before {
+            left: 0;
+            background: -webkit-linear-gradient(right, rgba(255, 255, 255, 0) 0%, white 100%);
+            background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, white 100%);
+        }
+
+        .slider::after {
+            right: 0;
+            background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, white 100%);
+        }
+
+        .slides {
+            margin-left: -100px;
+            margin-right: -100px;
+            white-space: nowrap;
+            font-size: 0;
+        }
+
+        .slider-active * {
+            cursor: grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+        }
+
+        .slider-active *:active {
+            cursor: grabbing;
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+        }
+
+        .slider-active .slides.red .slide {
+            background: red;
+        }
+
+        .slider-active .slides.green .slide {
+            background: green;
+        }
+
+        .slider-active .slides.blue .slide {
+            background: blue;
+        }
+
+        .slide {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            border: 2px solid white;
+            background: grey;
+        }
+
+        .slide a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .marker {
+            display: block;
+            text-align: center;
+        }
+
+        .number {
+            display: block;
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            margin-left: -25px;
+            border: 3px solid white;
+            border-radius: 99em;
+            color: white;
+        }
+
+        .toggle-btn {
+            cursor: pointer;
+            display: block;
+            padding: 10px 15px;
+            margin: 30px auto;
+            border: 5px solid black;
+            border-radius: 5px;
+            font-size: 2em;
+            color: white;
+            background: black;
+        }
+
+        .toggle-btn:hover {
+            background: white;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+<div class="marker">&#9660;</div>
+
+<div id="SliderOne" class="slider">
+    <div class="slides red">
+        <div class="slide"><a href="#"><span class="number">1</span></a></div>
+        <div class="slide"><a href="#"><span class="number">2</span></a></div>
+        <div class="slide"><a href="#"><span class="number">3</span></a></div>
+        <div class="slide"><a href="#"><span class="number">4</span></a></div>
+        <div class="slide"><a href="#"><span class="number">5</span></a></div>
+        <div class="slide"><a href="#"><span class="number">6</span></a></div>
+        <div class="slide"><a href="#"><span class="number">7</span></a></div>
+        <div class="slide"><a href="#"><span class="number">8</span></a></div>
+        <div class="slide"><a href="#"><span class="number">9</span></a></div>
+        <div class="slide"><a href="#"><span class="number">10</span></a></div>
+    </div>
+</div>
+
+<div id="SliderTwo" class="slider">
+    <div class="slides green">
+        <div class="slide"><a href="#"><span class="number">1</span></a></div>
+        <div class="slide"><a href="#"><span class="number">2</span></a></div>
+        <div class="slide"><a href="#"><span class="number">3</span></a></div>
+        <div class="slide"><a href="#"><span class="number">4</span></a></div>
+        <div class="slide"><a href="#"><span class="number">5</span></a></div>
+        <div class="slide"><a href="#"><span class="number">6</span></a></div>
+        <div class="slide"><a href="#"><span class="number">7</span></a></div>
+        <div class="slide"><a href="#"><span class="number">8</span></a></div>
+        <div class="slide"><a href="#"><span class="number">9</span></a></div>
+        <div class="slide"><a href="#"><span class="number">10</span></a></div>
+    </div>
+</div>
+
+<div id="SliderThree" class="slider">
+    <div class="slides blue">
+        <div class="slide"><a href="#"><span class="number">1</span></a></div>
+        <div class="slide"><a href="#"><span class="number">2</span></a></div>
+        <div class="slide"><a href="#"><span class="number">3</span></a></div>
+        <div class="slide"><a href="#"><span class="number">4</span></a></div>
+        <div class="slide"><a href="#"><span class="number">5</span></a></div>
+        <div class="slide"><a href="#"><span class="number">6</span></a></div>
+        <div class="slide"><a href="#"><span class="number">7</span></a></div>
+        <div class="slide"><a href="#"><span class="number">8</span></a></div>
+        <div class="slide"><a href="#"><span class="number">9</span></a></div>
+        <div class="slide"><a href="#"><span class="number">10</span></a></div>
+    </div>
+</div>
+
+<button type="button" id="ToggleButton" class="toggle-btn">Destroy All Sliders</button>
+
+<script src="slider.js"></script>
+<script>
+    (function () {
+
+        let slider1 = undefined;
+        let slider2 = undefined;
+        let slider3 = undefined;
+
+        function initSliders() {
+            slider1 = new Slider('SliderOne');
+            slider2 = new Slider('SliderTwo');
+            slider3 = new Slider('SliderThree');
+        }
+
+        function destroySliders() {
+            slider1.destroy();
+            slider1 = undefined;
+            slider2.destroy();
+            slider2 = undefined;
+            slider3.destroy();
+            slider3 = undefined;
+        }
+
+        function toggleSliders() {
+            if (slider1 && slider2 && slider3) {
+                destroySliders();
+                toggleButton.innerText = "Enable All Sliders";
+            } else {
+                initSliders();
+                toggleButton.innerText = "Destroy All Sliders";
+            }
+        }
+
+        const toggleButton = document.getElementById('ToggleButton');
+        toggleButton.addEventListener('click', toggleSliders);
+
+        initSliders();
+
+    })();
+</script>
+
+</body>
+</html>
