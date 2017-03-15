@@ -43,6 +43,7 @@ const Slider = class {
     destroy() {
         this.removeAllEvents();
         this.resetAllParams();
+        this.deactivateLinks();
         this.el.animator.removeAttribute("style");
         this.removeClass(this.el.container, 'slider-active');
     }

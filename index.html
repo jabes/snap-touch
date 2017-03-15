@@ -213,13 +213,13 @@
 
 <button type="button" id="ToggleButton" class="toggle-btn">Destroy All Sliders</button>
 
-<script src="slider.es5.js"></script>
+<script src="slider.js"></script>
 <script>
     (function () {
 
-        var slider1 = undefined;
-        var slider2 = undefined;
-        var slider3 = undefined;
+        let slider1 = undefined;
+        let slider2 = undefined;
+        let slider3 = undefined;
 
         function initSliders() {
             slider1 = new Slider('SliderOne');
@@ -246,7 +246,7 @@
             }
         }
 
-        var toggleButton = document.getElementById('ToggleButton');
+        const toggleButton = document.getElementById('ToggleButton');
         toggleButton.addEventListener('click', toggleSliders);
 
         initSliders();
