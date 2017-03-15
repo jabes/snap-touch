@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Touchy Slidey</title>
+    <title>Snap Touch</title>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Quicksand" rel="stylesheet">
     <style>
         html {
             box-sizing: border-box;
@@ -12,6 +13,29 @@
 
         *, *::before, *::after {
             box-sizing: inherit;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3em;
+            color: #222;
+        }
+
+        h3 {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2em;
+            color: #444;
+        }
+
+        p {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1em;
+            color: #666;
+        }
+
+        .intro-content {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
         .slider {
@@ -133,6 +157,13 @@
 </head>
 <body>
 
+<div class="intro-content">
+    <h1>Snap Touch</h1>
+    <h3>A touch enabled slider for horizontal navigation</h3>
+    <p>This slider calculates velocity to decelerate when flicked and will snap to an element when finished.</p>
+    <p><a href="https://github.com/jabes/SnapTouch">View on Github</a></p>
+</div>
+
 <div class="marker">&#9660;</div>
 
 <div id="SliderOne" class="slider">
@@ -182,13 +213,13 @@
 
 <button type="button" id="ToggleButton" class="toggle-btn">Destroy All Sliders</button>
 
-<script src="slider.js"></script>
+<script src="slider.es5.js"></script>
 <script>
     (function () {
 
-        let slider1 = undefined;
-        let slider2 = undefined;
-        let slider3 = undefined;
+        var slider1 = undefined;
+        var slider2 = undefined;
+        var slider3 = undefined;
 
         function initSliders() {
             slider1 = new Slider('SliderOne');
@@ -215,7 +246,7 @@
             }
         }
 
-        const toggleButton = document.getElementById('ToggleButton');
+        var toggleButton = document.getElementById('ToggleButton');
         toggleButton.addEventListener('click', toggleSliders);
 
         initSliders();

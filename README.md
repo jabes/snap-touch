@@ -7,3 +7,4 @@ This slider calculates velocity to decelerate when flicked and will snap to an e
 - No dependencies
 - Modern JavaScript (ES6)
 - IE9+ compatible
+- Responsive
