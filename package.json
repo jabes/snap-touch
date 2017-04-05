@@ -8,6 +8,7 @@
         "url": "http://jbull.ca/"
     },
     "license": "MIT",
+    "main": "snap-touch.js",
     "homepage": "https://jabes.github.io/SnapTouch/",
     "repository": {
         "type": "git",
