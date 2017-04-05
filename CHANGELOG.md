@@ -34,4 +34,4 @@ All notable changes to this project will be documented in this file.
 - Add package json
 
 [1.0.1]: https://github.com/jabes/SnapTouch/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/jabes/SnapTouch/tree/v1.0.0
+[1.0.0]: https://github.com/jabes/SnapTouch/commits/v1.0.0
