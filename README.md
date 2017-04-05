@@ -14,6 +14,7 @@ Install with NPM
 Use a CDN
 
 https://unpkg.com/snap-touch/snap-touch.js
+https://unpkg.com/snap-touch/snap-touch.min.js
 
 ### Features
 
@@ -66,12 +67,21 @@ new SnapTouch('slider').create();
 
 ### Methods
 
-1. `.create()`
-2. `.destroy()`
-3. `.getActiveIndex()`
-3. `.setActiveIndex(index)`
-4. `.getGosition()`
-5. `.setPosition(posX)`
+| NAME           | PARAMETERS | TYPE     | DESCRIPTION                           |
+|----------------|------------|----------|---------------------------------------|
+| create         |            |          |                                       |
+| destroy        |            |          |                                       |
+| getActiveIndex |            |          |                                       |
+| setActiveIndex | index      | (int)    | The index of the slide to activate.   |
+| getGosition    |            |          |                                       |
+| setPosition    | posX       | (number) | The slider position to set in pixels. |
+
+##### Example:
+
+```javascript
+const slider = new SnapTouch('slider').create();
+slider.setActiveIndex(2);
+```
 
 ### Events
 
@@ -91,6 +101,8 @@ new SnapTouch('slider').create();
 |                              | lastTimestamp | (number) | The last tracking step time in milliseconds.           |
 | SnapTouch.positionChanged    | posX          | (number) | The current position in pixels.                        |
 | SnapTouch.easePositionEnd    | posX          | (number) | The current position in pixels.                        |
+
+##### Example:
 
 ```javascript
 const slider = new SnapTouch('slider').create();
