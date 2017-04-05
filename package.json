@@ -1,0 +1,33 @@
+{
+    "name": "snap-touch",
+    "description": "This slider calculates velocity to decelerate when flicked and will snap to an element when finished.",
+    "version": "1.0.0",
+    "author": {
+        "name": "Justin Bull",
+        "email": "bull.justin@gmail.com",
+        "url": "http://jbull.ca/"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jabes/SnapTouch"
+    },
+    "keywords": [
+        "slider",
+        "slides",
+        "gallery",
+        "navigation",
+        "snap",
+        "swipe",
+        "flick",
+        "velocity",
+        "momentum",
+        "responsive",
+        "drag",
+        "touch",
+        "mouse",
+        "events",
+        "javascript"
+    ],
+    "homepage": "https://jabes.github.io/SnapTouch/"
+}
