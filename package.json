@@ -1,46 +1,46 @@
 {
-    "name": "snap-touch",
-    "description": "A touch enabled slider for horizontal navigation",
-    "version": "1.0.0",
-    "author": {
-        "name": "Justin Bull",
-        "email": "bull.justin@gmail.com",
-        "url": "http://jbull.ca/"
-    },
-    "license": "MIT",
-    "main": "snap-touch.js",
-    "homepage": "https://jabes.github.io/SnapTouch/",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jabes/SnapTouch"
-    },
-    "keywords": [
-        "slider",
-        "gallery",
-        "menu",
-        "navigation",
-        "snap",
-        "flick",
-        "swipe",
-        "swipeable",
-        "gestures",
-        "velocity",
-        "momentum",
-        "accelerated",
-        "transitions",
-        "responsive",
-        "drag",
-        "draggable",
-        "touch",
-        "mouse",
-        "javascript"
-    ],
-    "devDependencies": {
-        "babel-preset-es2015": "6.24.0",
-        "gulp": "3.9.1",
-        "gulp-babel": "6.1.2",
-        "gulp-eslint": "3.0.1",
-        "gulp-rename": "1.2.2",
-        "gulp-uglify": "2.1.2"
-    }
+  "name": "snap-touch",
+  "description": "A touch enabled slider for horizontal navigation",
+  "version": "1.0.1",
+  "author": {
+    "name": "Justin Bull",
+    "email": "bull.justin@gmail.com",
+    "url": "http://jbull.ca/"
+  },
+  "license": "MIT",
+  "main": "snap-touch.js",
+  "homepage": "https://jabes.github.io/SnapTouch/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jabes/SnapTouch"
+  },
+  "keywords": [
+    "slider",
+    "gallery",
+    "menu",
+    "navigation",
+    "snap",
+    "flick",
+    "swipe",
+    "swipeable",
+    "gestures",
+    "velocity",
+    "momentum",
+    "accelerated",
+    "transitions",
+    "responsive",
+    "drag",
+    "draggable",
+    "touch",
+    "mouse",
+    "javascript"
+  ],
+  "devDependencies": {
+    "babel-preset-es2015": "6.24.0",
+    "gulp": "3.9.1",
+    "gulp-babel": "6.1.2",
+    "gulp-eslint": "3.0.1",
+    "gulp-rename": "1.2.2",
+    "gulp-uglify": "2.1.2"
+  }
 }
