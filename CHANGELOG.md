@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.0.2] - 2017-04-05
+### Added
+- Add cdn link to minified version
+### Changed
+- Use table syntax for method documentation
+
 ## [1.0.1] - 2017-04-05
 ### Added
 - Add change log
@@ -33,5 +39,6 @@ All notable changes to this project will be documented in this file.
 - Add gulp build tools to create production ready scripts
 - Add package json
 
+[1.0.2]: https://github.com/jabes/SnapTouch/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/jabes/SnapTouch/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jabes/SnapTouch/commits/v1.0.0
