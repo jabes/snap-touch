@@ -6,9 +6,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Slider = function () {
-    function Slider(selector) {
-        _classCallCheck(this, Slider);
+var SnapTouch = function () {
+    function SnapTouch(selector) {
+        _classCallCheck(this, SnapTouch);
+
+        this.active = false;
 
         this.el = {};
         this.el.container = document.getElementById(selector);
@@ -35,28 +37,40 @@ var Slider = function () {
             isEasing: undefined,
             hasMoved: undefined
         };
-
-        this.init();
     }
 
-    _createClass(Slider, [{
-        key: 'init',
-        value: function init() {
+    _createClass(SnapTouch, [{
+        key: 'activate',
+        value: function activate() {
+            this.active = true;
+            this.addClass(this.el.container, 'active');
+        }
+    }, {
+        key: 'deactivate',
+        value: function deactivate() {
+            this.active = false;
+            this.removeClass(this.el.container, 'active');
+        }
+    }, {
+        key: 'create',
+        value: function create() {
             if (this.el.container && this.el.slides.length >= 0) {
+                this.dispatchEvent('SnapTouch.created');
+                this.activate();
                 this.getActiveIndex();
                 this.bindEvents();
                 this.resize();
-                this.addClass(this.el.container, 'slider-active');
             }
         }
     }, {
         key: 'destroy',
         value: function destroy() {
+            this.deactivate();
+            this.resetParams();
             this.removeAllEvents();
-            this.resetAllParams();
-            this.deactivateLinks();
-            this.el.animator.removeAttribute("style");
-            this.removeClass(this.el.container, 'slider-active');
+            this.unsetActiveLinks();
+            this.el.animator.removeAttribute('style');
+            this.dispatchEvent('SnapTouch.destroyed');
         }
     }, {
         key: 'hasClass',
@@ -75,28 +89,6 @@ var Slider = function () {
             el.className = el.className.replace(reg, ' ');
         }
     }, {
-        key: 'cloneObject',
-        value: function cloneObject(obj) {
-            return this.extendObject({}, obj);
-        }
-    }, {
-        key: 'extendObject',
-        value: function extendObject(obj) {
-            for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                sources[_key - 1] = arguments[_key];
-            }
-
-            for (var i = 0; i < sources.length; i++) {
-                var source = sources[i];
-                for (var key in source) {
-                    if (source.hasOwnProperty(key)) {
-                        obj[key] = source[key];
-                    }
-                }
-            }
-            return obj;
-        }
-    }, {
         key: 'getActiveIndex',
         value: function getActiveIndex() {
             var _this = this;
@@ -110,8 +102,20 @@ var Slider = function () {
                 var activeAnchor = activeAnchors[0];
                 activeIndex = Array.prototype.slice.call(this.el.anchors).indexOf(activeAnchor);
             }
-            this.params.activeIndex = activeIndex;
+            this.setActiveIndex(activeIndex);
             return activeIndex;
+        }
+    }, {
+        key: 'setActiveIndex',
+        value: function setActiveIndex(index) {
+            this.params.activeIndex = index;
+            this.dispatchEvent('SnapTouch.activeIndexChanged', {
+                bubbles: false,
+                cancelable: false,
+                detail: {
+                    index: this.params.activeIndex
+                }
+            });
         }
     }, {
         key: 'on',
@@ -186,8 +190,8 @@ var Slider = function () {
             }
         }
     }, {
-        key: 'resetAllParams',
-        value: function resetAllParams() {
+        key: 'resetParams',
+        value: function resetParams() {
             for (var key in this.params) {
                 if (this.params.hasOwnProperty(key)) {
                     this.params[key] = undefined;
@@ -195,14 +199,14 @@ var Slider = function () {
             }
         }
     }, {
-        key: 'activateLink',
-        value: function activateLink(target) {
-            this.deactivateLinks();
+        key: 'setActiveLink',
+        value: function setActiveLink(target) {
+            this.unsetActiveLinks();
             this.addClass(target, 'active');
         }
     }, {
-        key: 'deactivateLinks',
-        value: function deactivateLinks() {
+        key: 'unsetActiveLinks',
+        value: function unsetActiveLinks() {
             for (var i = 0; i < this.el.anchors.length; i++) {
                 this.removeClass(this.el.anchors.item(i), 'active');
             }
@@ -228,6 +232,11 @@ var Slider = function () {
             return false;
         }
     }, {
+        key: 'addEventListener',
+        value: function addEventListener(type, listener) {
+            this.el.container.addEventListener(type, listener);
+        }
+    }, {
         key: 'dispatchEvent',
         value: function dispatchEvent(typeArg) {
             var customEventInit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { bubbles: false, cancelable: false, detail: null };
@@ -235,7 +244,7 @@ var Slider = function () {
             var supported = 'CustomEvent' in window && typeof window.CustomEvent === 'function';
             if (!supported) {
                 var CustomEvent = function CustomEvent(typeArg, customEventInit) {
-                    var event = document.createEvent("CustomEvent");
+                    var event = document.createEvent('CustomEvent');
                     event.initCustomEvent(typeArg, customEventInit.bubbles, customEventInit.cancelable, customEventInit.detail);
                     return event;
                 };
@@ -259,9 +268,9 @@ var Slider = function () {
                 this.on(this.el.anchors.item(i), 'click', function (event) {
                     _this5.preventDefault(event);
                     if (_this5.params.isClick) {
-                        _this5.activateLink(event._target);
+                        _this5.setActiveLink(event._target);
                         _this5.getActiveIndex();
-                        _this5.easeTowardsLink();
+                        _this5.easeTowardsTarget();
                         _this5.delayLocationChange(event._target.href);
                     }
                 });
@@ -303,21 +312,21 @@ var Slider = function () {
     }, {
         key: 'startTracking',
         value: function startTracking() {
-            this.dispatchEvent("slider.startTracking");
             if (this.params.ticker) this.stopTracking();
             this.params.ticker = window.setInterval(this.track.bind(this), 100);
             this.on(document, 'touchmove', this.touchMove);
             this.on(document, 'mousemove', this.touchMove);
             this.on(document, 'touchend', this.touchEnd);
             this.on(document, 'mouseup', this.touchEnd);
+            this.dispatchEvent('SnapTouch.trackingStart');
         }
     }, {
         key: 'stopTracking',
         value: function stopTracking() {
-            this.dispatchEvent("slider.stopTracking");
             window.clearInterval(this.params.ticker);
             delete this.params.ticker;
             this.off(document);
+            this.dispatchEvent('SnapTouch.trackingEnd');
         }
     }, {
         key: 'track',
@@ -327,18 +336,31 @@ var Slider = function () {
             var delta = this.params.posX - this.params.lastPosX;
             var v = 1000 * delta / (1 + timeElapsed);
             this.params.velocity = 0.8 * v + 0.2 * this.params.velocity;
-            this.params.lastPosX = this.params.posX;
-            this.params.lastTimestamp = now;
-            this.dispatchEvent("slider.track", {
+            this.dispatchEvent('SnapTouch.tracking', {
                 bubbles: false,
                 cancelable: false,
-                detail: this.cloneObject(this.params)
+                detail: {
+                    now: now,
+                    timeElapsed: timeElapsed,
+                    delta: delta,
+                    velocity: this.params.velocity,
+                    posX: this.params.posX,
+                    lastPosX: this.params.lastPosX,
+                    lastTimestamp: this.params.lastTimestamp
+                }
             });
+            this.params.lastPosX = this.params.posX;
+            this.params.lastTimestamp = now;
+        }
+    }, {
+        key: 'getPosition',
+        value: function getPosition() {
+            return this.params.posX;
         }
     }, {
         key: 'setPosition',
         value: function setPosition(posX) {
-            if (this.params.posX !== posX) {
+            if (this.getPosition() !== posX) {
                 var xMin = this.params.slideWidth * -(this.params.slideTotal - 1);
                 var xMax = 0;
                 var style = this.el.animator.style;
@@ -346,6 +368,13 @@ var Slider = function () {
                 this.params.posX = posX > xMax ? xMax : posX < xMin ? xMin : posX;
                 this.params.hasMoved = true;
                 style[prefixed] = 'translate(' + this.params.posX + 'px, 0)';
+                this.dispatchEvent('SnapTouch.positionChanged', {
+                    bubbles: false,
+                    cancelable: false,
+                    detail: {
+                        posX: this.params.posX
+                    }
+                });
             }
         }
     }, {
@@ -366,19 +395,27 @@ var Slider = function () {
                 var timeConstant = 325;
                 var timeElapsed = Date.now() - this.params.lastTimestamp;
                 var delta = -this.params.amplitude * Math.exp(-timeElapsed / timeConstant);
-                this.params.isEasing = delta > 5 || delta < -5;
+                var xMin = this.params.slideWidth * -(this.params.slideTotal - 1);
+                var xMax = 0;
+                this.params.isEasing = this.params.posX > xMin && this.params.posX < xMax && (delta > 5 || delta < -5);
                 if (this.params.isEasing) {
                     this.setPosition(this.params.targetX + delta);
                     this.requestAnimation(this.easePosition);
                 } else {
                     this.setPosition(this.params.targetX);
-                    this.dispatchEvent("slider.easePositionEnd");
+                    this.dispatchEvent('SnapTouch.easePositionEnd', {
+                        bubbles: false,
+                        cancelable: false,
+                        detail: {
+                            posX: this.params.posX
+                        }
+                    });
                 }
             }
         }
     }, {
-        key: 'easeTowardsLink',
-        value: function easeTowardsLink() {
+        key: 'easeTowardsTarget',
+        value: function easeTowardsTarget() {
             this.params.targetX = this.params.slideWidth * this.params.activeIndex * -1;
             this.params.amplitude = this.params.targetX - this.params.posX;
             this.requestAnimation(this.easePosition);
@@ -441,13 +478,13 @@ var Slider = function () {
         }
     }]);
 
-    return Slider;
+    return SnapTouch;
 }();
 
 if ((typeof module === 'undefined' ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
-    module.exports = Slider;
+    module.exports = SnapTouch;
 }
 
-if (typeof window !== "undefined") {
-    window.Slider = Slider;
+if (typeof window !== 'undefined') {
+    window.SnapTouch = SnapTouch;
 }

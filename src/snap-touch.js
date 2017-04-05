@@ -1,6 +1,8 @@
-const Slider = class {
+const SnapTouch = class {
 
     constructor(selector) {
+
+        this.active = false;
 
         this.el = {};
         this.el.container = document.getElementById(selector);
@@ -28,24 +30,35 @@ const Slider = class {
             hasMoved: undefined,
         };
 
-        this.init();
     }
 
-    init() {
+    activate() {
+        this.active = true;
+        this.addClass(this.el.container, 'active');
+    }
+
+    deactivate() {
+        this.active = false;
+        this.removeClass(this.el.container, 'active');
+    }
+
+    create() {
         if (this.el.container && this.el.slides.length >= 0) {
+            this.dispatchEvent('SnapTouch.created');
+            this.activate();
             this.getActiveIndex();
             this.bindEvents();
             this.resize();
-            this.addClass(this.el.container, 'slider-active');
         }
     }
 
     destroy() {
+        this.deactivate();
+        this.resetParams();
         this.removeAllEvents();
-        this.resetAllParams();
-        this.deactivateLinks();
-        this.el.animator.removeAttribute("style");
-        this.removeClass(this.el.container, 'slider-active');
+        this.unsetActiveLinks();
+        this.el.animator.removeAttribute('style');
+        this.dispatchEvent('SnapTouch.destroyed');
     }
 
     hasClass(el, className) {
@@ -61,22 +74,6 @@ const Slider = class {
         el.className = el.className.replace(reg, ' ');
     }
 
-    cloneObject(obj) {
-        return this.extendObject({}, obj);
-    }
-
-    extendObject(obj, ...sources) {
-        for (let i = 0; i < sources.length; i++) {
-            let source = sources[i];
-            for (let key in source) {
-                if (source.hasOwnProperty(key)) {
-                    obj[key] = source[key];
-                }
-            }
-        }
-        return obj;
-    }
-
     getActiveIndex() {
         let activeIndex = 0;
         const _isActive = (anchor) => {
@@ -87,8 +84,19 @@ const Slider = class {
             const activeAnchor = activeAnchors[0];
             activeIndex = Array.prototype.slice.call(this.el.anchors).indexOf(activeAnchor);
         }
-        this.params.activeIndex = activeIndex;
+        this.setActiveIndex(activeIndex);
         return activeIndex;
+    }
+
+    setActiveIndex(index) {
+        this.params.activeIndex = index;
+        this.dispatchEvent('SnapTouch.activeIndexChanged', {
+            bubbles: false,
+            cancelable: false,
+            detail: {
+                index: this.params.activeIndex
+            }
+        });
     }
 
     on(target, type, callback) {
@@ -154,7 +162,7 @@ const Slider = class {
         }
     }
 
-    resetAllParams() {
+    resetParams() {
         for (let key in this.params) {
             if (this.params.hasOwnProperty(key)) {
                 this.params[key] = undefined;
@@ -162,12 +170,12 @@ const Slider = class {
         }
     }
 
-    activateLink(target) {
-        this.deactivateLinks();
+    setActiveLink(target) {
+        this.unsetActiveLinks();
         this.addClass(target, 'active');
     }
 
-    deactivateLinks() {
+    unsetActiveLinks() {
         for (let i = 0; i < this.el.anchors.length; i++) {
             this.removeClass(this.el.anchors.item(i), 'active');
         }
@@ -189,11 +197,15 @@ const Slider = class {
         return false;
     }
 
+    addEventListener(type, listener) {
+        this.el.container.addEventListener(type, listener);
+    }
+
     dispatchEvent(typeArg, customEventInit = {bubbles: false, cancelable: false, detail: null}) {
         const supported = 'CustomEvent' in window && typeof window.CustomEvent === 'function';
         if (!supported) {
             const CustomEvent = function (typeArg, customEventInit) {
-                let event = document.createEvent("CustomEvent");
+                let event = document.createEvent('CustomEvent');
                 event.initCustomEvent(typeArg, customEventInit.bubbles, customEventInit.cancelable, customEventInit.detail);
                 return event;
             };
@@ -214,9 +226,9 @@ const Slider = class {
             this.on(this.el.anchors.item(i), 'click', (event) => {
                 this.preventDefault(event);
                 if (this.params.isClick) {
-                    this.activateLink(event._target);
+                    this.setActiveLink(event._target);
                     this.getActiveIndex();
-                    this.easeTowardsLink();
+                    this.easeTowardsTarget();
                     this.delayLocationChange(event._target.href);
                 }
             });
@@ -255,20 +267,20 @@ const Slider = class {
     }
 
     startTracking() {
-        this.dispatchEvent("slider.startTracking");
         if (this.params.ticker) this.stopTracking();
         this.params.ticker = window.setInterval(this.track.bind(this), 100);
         this.on(document, 'touchmove', this.touchMove);
         this.on(document, 'mousemove', this.touchMove);
         this.on(document, 'touchend', this.touchEnd);
         this.on(document, 'mouseup', this.touchEnd);
+        this.dispatchEvent('SnapTouch.trackingStart');
     }
 
     stopTracking() {
-        this.dispatchEvent("slider.stopTracking");
         window.clearInterval(this.params.ticker);
         delete this.params.ticker;
         this.off(document);
+        this.dispatchEvent('SnapTouch.trackingEnd');
     }
 
     track() {
@@ -277,17 +289,29 @@ const Slider = class {
         const delta = this.params.posX - this.params.lastPosX;
         const v = 1000 * delta / (1 + timeElapsed);
         this.params.velocity = 0.8 * v + 0.2 * this.params.velocity;
-        this.params.lastPosX = this.params.posX;
-        this.params.lastTimestamp = now;
-        this.dispatchEvent("slider.track", {
+        this.dispatchEvent('SnapTouch.tracking', {
             bubbles: false,
             cancelable: false,
-            detail: this.cloneObject(this.params),
+            detail: {
+                now: now,
+                timeElapsed: timeElapsed,
+                delta: delta,
+                velocity: this.params.velocity,
+                posX: this.params.posX,
+                lastPosX: this.params.lastPosX,
+                lastTimestamp: this.params.lastTimestamp,
+            }
         });
+        this.params.lastPosX = this.params.posX;
+        this.params.lastTimestamp = now;
+    }
+
+    getPosition() {
+        return this.params.posX;
     }
 
     setPosition(posX) {
-        if (this.params.posX !== posX) {
+        if (this.getPosition() !== posX) {
             const xMin = this.params.slideWidth * -(this.params.slideTotal - 1);
             const xMax = 0;
             let style = this.el.animator.style;
@@ -295,6 +319,13 @@ const Slider = class {
             this.params.posX = (posX > xMax) ? xMax : (posX < xMin) ? xMin : posX;
             this.params.hasMoved = true;
             style[prefixed] = 'translate(' + this.params.posX + 'px, 0)';
+            this.dispatchEvent('SnapTouch.positionChanged', {
+                bubbles: false,
+                cancelable: false,
+                detail: {
+                    posX: this.params.posX
+                }
+            });
         }
     }
 
@@ -313,18 +344,29 @@ const Slider = class {
             const timeConstant = 325;
             const timeElapsed = Date.now() - this.params.lastTimestamp;
             const delta = -this.params.amplitude * Math.exp(-timeElapsed / timeConstant);
-            this.params.isEasing = delta > 5 || delta < -5;
+            const xMin = this.params.slideWidth * -(this.params.slideTotal - 1);
+            const xMax = 0;
+            this.params.isEasing =
+                this.params.posX > xMin &&
+                this.params.posX < xMax &&
+                (delta > 5 || delta < -5);
             if (this.params.isEasing) {
                 this.setPosition(this.params.targetX + delta);
                 this.requestAnimation(this.easePosition);
             } else {
                 this.setPosition(this.params.targetX);
-                this.dispatchEvent("slider.easePositionEnd");
+                this.dispatchEvent('SnapTouch.easePositionEnd', {
+                    bubbles: false,
+                    cancelable: false,
+                    detail: {
+                        posX: this.params.posX
+                    }
+                });
             }
         }
     }
 
-    easeTowardsLink() {
+    easeTowardsTarget() {
         this.params.targetX = this.params.slideWidth * this.params.activeIndex * -1;
         this.params.amplitude = this.params.targetX - this.params.posX;
         this.requestAnimation(this.easePosition);
@@ -384,9 +426,9 @@ const Slider = class {
 };
 
 if (typeof module === 'object' && module.exports) {
-    module.exports = Slider;
+    module.exports = SnapTouch;
 }
 
-if (typeof window !== "undefined") {
-    window.Slider = Slider;
+if (typeof window !== 'undefined') {
+    window.SnapTouch = SnapTouch;
 }
