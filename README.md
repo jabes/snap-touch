@@ -14,6 +14,7 @@ Install with NPM
 Use a CDN
 
 https://unpkg.com/snap-touch/snap-touch.js
+
 https://unpkg.com/snap-touch/snap-touch.min.js
 
 ### Features
