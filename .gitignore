@@ -1,3 +1,7 @@
 **/.*
+!.babelrc
 !.editorconfig
+!.eslintrc
 !.gitignore
+
+node_modules/
