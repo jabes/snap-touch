@@ -1,5 +1,5 @@
 # SnapTouch
-### Touch Enabled Slider For Horizontal Navigation
+### A touch enabled slider for horizontal navigation
 
 This slider calculates velocity to decelerate when flicked and will snap to an element when finished.
 

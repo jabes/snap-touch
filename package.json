@@ -1,6 +1,6 @@
 {
     "name": "snap-touch",
-    "description": "This slider calculates velocity to decelerate when flicked and will snap to an element when finished.",
+    "description": "A touch enabled slider for horizontal navigation",
     "version": "1.0.0",
     "author": {
         "name": "Justin Bull",
