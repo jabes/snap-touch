@@ -68,35 +68,35 @@
             background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, white 100%);
         }
 
-        .slides {
-            margin-left: -100px;
-            margin-right: -100px;
-            white-space: nowrap;
-            font-size: 0;
-        }
-
-        .slider-active * {
+        .slider.active * {
             cursor: grab;
             cursor: -moz-grab;
             cursor: -webkit-grab;
         }
 
-        .slider-active *:active {
+        .slider.active *:active {
             cursor: grabbing;
             cursor: -moz-grabbing;
             cursor: -webkit-grabbing;
         }
 
-        .slider-active .slides.red .slide {
+        .slider.active .slides.red .slide {
             background: red;
         }
 
-        .slider-active .slides.green .slide {
+        .slider.active .slides.green .slide {
             background: green;
         }
 
-        .slider-active .slides.blue .slide {
+        .slider.active .slides.blue .slide {
             background: blue;
+        }
+
+        .slides {
+            margin-left: -100px;
+            margin-right: -100px;
+            white-space: nowrap;
+            font-size: 0;
         }
 
         .slide {
@@ -217,31 +217,55 @@
 <script>
     (function () {
 
-        let slider1 = undefined;
-        let slider2 = undefined;
-        let slider3 = undefined;
+        window.slider1 = new SnapTouch('SliderOne');
+        window.slider2 = new SnapTouch('SliderTwo');
+        window.slider3 = new SnapTouch('SliderThree');
 
-        function initSliders() {
-            slider1 = new Slider('SliderOne');
-            slider2 = new Slider('SliderTwo');
-            slider3 = new Slider('SliderThree');
+        function logEvent(event) {
+            console.log(
+                '#' + event.target.id,
+                event.type,
+                event.detail
+            );
+        }
+
+        const events = [
+            'SnapTouch.created',
+            'SnapTouch.destroyed',
+            'SnapTouch.activeIndexChanged',
+            'SnapTouch.trackingStart',
+            'SnapTouch.trackingEnd',
+            'SnapTouch.tracking',
+            'SnapTouch.positionChanged',
+            'SnapTouch.easePositionEnd',
+        ];
+
+        for (let i = 0; i < events.length; i++) {
+            slider1.addEventListener(events[i], logEvent);
+            slider2.addEventListener(events[i], logEvent);
+            slider3.addEventListener(events[i], logEvent);
+        }
+
+        function createSliders() {
+            slider1.create();
+            slider2.create();
+            slider3.create();
         }
 
         function destroySliders() {
             slider1.destroy();
-            slider1 = undefined;
             slider2.destroy();
-            slider2 = undefined;
             slider3.destroy();
-            slider3 = undefined;
         }
 
         function toggleSliders() {
-            if (slider1 && slider2 && slider3) {
+            if (slider1.active &&
+                slider2.active &&
+                slider3.active) {
                 destroySliders();
                 toggleButton.innerText = "Enable All Sliders";
             } else {
-                initSliders();
+                createSliders();
                 toggleButton.innerText = "Destroy All Sliders";
             }
         }
@@ -249,7 +273,7 @@
         const toggleButton = document.getElementById('ToggleButton');
         toggleButton.addEventListener('click', toggleSliders);
 
-        initSliders();
+        createSliders();
 
     })();
 </script>
