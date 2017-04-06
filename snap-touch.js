@@ -69,7 +69,7 @@ var SnapTouch = function () {
             this.resetParams();
             this.removeAllEvents();
             this.unsetActiveLinks();
-            this.el.animator.removeAttribute('style');
+            this.unsetDimensions();
             this.dispatchEvent('SnapTouch.destroyed');
         }
     }, {
@@ -275,6 +275,10 @@ var SnapTouch = function () {
                     }
                 });
             }
+
+            this.on(this.el.container, 'SnapTouch.resized', function (event) {
+                _this5.setPosition(event.detail.slideWidth * _this5.params.activeIndex * -1);
+            });
         }
     }, {
         key: 'eventCoords',
@@ -351,6 +355,22 @@ var SnapTouch = function () {
             });
             this.params.lastPosX = this.params.posX;
             this.params.lastTimestamp = now;
+        }
+    }, {
+        key: 'setDimensions',
+        value: function setDimensions() {
+            this.el.animator.style.width = this.params.slideWidth * this.params.slideTotal + 'px';
+            for (var i = 0; i < this.params.slideTotal; i++) {
+                this.el.slides.item(i).style.width = this.params.slideWidth + 'px';
+            }
+        }
+    }, {
+        key: 'unsetDimensions',
+        value: function unsetDimensions() {
+            this.el.animator.style.width = null;
+            for (var i = 0; i < this.params.slideTotal; i++) {
+                this.el.slides.item(i).style.width = null;
+            }
         }
     }, {
         key: 'getPosition',
@@ -433,10 +453,18 @@ var SnapTouch = function () {
     }, {
         key: 'resize',
         value: function resize() {
+            this.unsetDimensions();
             this.params.slideWidth = this.el.slides.item(0).getBoundingClientRect().width;
             this.params.slideTotal = this.el.slides.length;
-            this.el.animator.style.width = this.params.slideWidth * this.params.slideTotal + 'px';
-            this.setPosition(this.params.slideWidth * this.params.activeIndex * -1);
+            this.setDimensions();
+            this.dispatchEvent('SnapTouch.resized', {
+                bubbles: false,
+                cancelable: false,
+                detail: {
+                    slideWidth: this.params.slideWidth,
+                    slideTotal: this.params.slideTotal
+                }
+            });
         }
     }, {
         key: 'touchStart',
