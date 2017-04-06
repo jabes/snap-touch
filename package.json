@@ -1,7 +1,7 @@
 {
   "name": "snap-touch",
   "description": "A touch enabled slider for horizontal navigation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": {
     "name": "Justin Bull",
     "email": "bull.justin@gmail.com",
