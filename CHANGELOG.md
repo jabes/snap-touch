@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- Add `SnapTouch.resized` event
+- Add private `setDimensions` method
+- Add private `unsetDimensions` method
+### Changed
+- Set width of individual slides
+- Unset dimensions before calculating slide width
+
 ## [1.0.2] - 2017-04-05
 ### Added
 - Add cdn link to minified version
@@ -39,6 +48,7 @@ All notable changes to this project will be documented in this file.
 - Add gulp build tools to create production ready scripts
 - Add package json
 
+[Unreleased]: https://github.com/jabes/SnapTouch/compare/v1.0.2...HEAD
 [1.0.2]: https://github.com/jabes/SnapTouch/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/jabes/SnapTouch/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jabes/SnapTouch/commits/v1.0.0

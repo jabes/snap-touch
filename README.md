@@ -101,6 +101,8 @@ slider.setActiveIndex(2);
 |                              | lastTimestamp | (number) | The last tracking step time in milliseconds.           |
 | SnapTouch.positionChanged    | posX          | (number) | The current position in pixels.                        |
 | SnapTouch.easePositionEnd    | posX          | (number) | The current position in pixels.                        |
+| SnapTouch.resized            | slideWidth    | (number) | The width of an individual slide in pixels.            |
+|                              | slideTotal    | (int)    | The total number of slides.                            |
 
 ##### Example:
 

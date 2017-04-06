@@ -57,7 +57,7 @@ const SnapTouch = class {
         this.resetParams();
         this.removeAllEvents();
         this.unsetActiveLinks();
-        this.el.animator.removeAttribute('style');
+        this.unsetDimensions();
         this.dispatchEvent('SnapTouch.destroyed');
     }
 
@@ -233,6 +233,12 @@ const SnapTouch = class {
                 }
             });
         }
+
+        this.on(this.el.container, 'SnapTouch.resized', (event) => {
+            this.setPosition(
+                event.detail.slideWidth * this.params.activeIndex * -1
+            );
+        });
     }
 
     eventCoords(event) {
@@ -304,6 +310,20 @@ const SnapTouch = class {
         });
         this.params.lastPosX = this.params.posX;
         this.params.lastTimestamp = now;
+    }
+
+    setDimensions() {
+        this.el.animator.style.width = (this.params.slideWidth * this.params.slideTotal) + 'px';
+        for (let i = 0; i < this.params.slideTotal; i++) {
+            this.el.slides.item(i).style.width = this.params.slideWidth + 'px';
+        }
+    }
+
+    unsetDimensions() {
+        this.el.animator.style.width = null;
+        for (let i = 0; i < this.params.slideTotal; i++) {
+            this.el.slides.item(i).style.width = null;
+        }
     }
 
     getPosition() {
@@ -382,10 +402,18 @@ const SnapTouch = class {
     }
 
     resize() {
+        this.unsetDimensions();
         this.params.slideWidth = this.el.slides.item(0).getBoundingClientRect().width;
         this.params.slideTotal = this.el.slides.length;
-        this.el.animator.style.width = (this.params.slideWidth * this.params.slideTotal) + 'px';
-        this.setPosition(this.params.slideWidth * this.params.activeIndex * -1);
+        this.setDimensions();
+        this.dispatchEvent('SnapTouch.resized', {
+            bubbles: false,
+            cancelable: false,
+            detail: {
+                slideWidth: this.params.slideWidth,
+                slideTotal: this.params.slideTotal,
+            }
+        });
     }
 
     touchStart(event) {
