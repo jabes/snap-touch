@@ -5,7 +5,12 @@ const SnapTouch = class {
         this.active = false;
 
         this.el = {};
-        this.el.container = document.getElementById(selector);
+        this.el.container = selector instanceof HTMLElement
+            ? selector
+            : (
+                document.getElementById(selector) ||
+                document.querySelector(selector)
+            );
         this.el.animator = this.el.container ? this.el.container.querySelector('.slides') : undefined;
         this.el.slides = this.el.animator ? this.el.animator.querySelectorAll('.slide') : [];
         this.el.anchors = this.el.animator ? this.el.animator.querySelectorAll('a[href]') : [];

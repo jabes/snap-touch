@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.0.5] - 2017-04-11
+### Changed
+- Can now pass a string selector or dom element to constructor
+
 ## [1.0.4] - 2017-04-05
 ### Fixed
 - Forgot to publish build assets
@@ -45,15 +49,15 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - When easing, check if position is out of bounds for `SnapTouch.easePositionEnd` event
 
-
 ## [1.0.0] - 2017-04-04
 ### Added
 - Add snap-touch.js with demo
 - Add gulp build tools to create production ready scripts
 - Add package json
 
-[Unreleased]: https://github.com/jabes/SnapTouch/compare/v1.0.4...HEAD
-[1.0.3]: https://github.com/jabes/SnapTouch/compare/v1.0.3...v1.0.4
+[Unreleased]: https://github.com/jabes/SnapTouch/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/jabes/SnapTouch/compare/v1.0.4...v1.0.5
+[1.0.4]: https://github.com/jabes/SnapTouch/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/jabes/SnapTouch/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/jabes/SnapTouch/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/jabes/SnapTouch/compare/v1.0.0...v1.0.1
