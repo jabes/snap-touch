@@ -9,10 +9,10 @@
   },
   "license": "MIT",
   "main": "snap-touch.js",
-  "homepage": "https://jabes.github.io/SnapTouch/",
+  "homepage": "https://jabes.github.io/snap-touch/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jabes/SnapTouch"
+    "url": "https://github.com/jabes/snap-touch"
   },
   "keywords": [
     "slider",
