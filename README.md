@@ -1,6 +1,8 @@
-# Snap Touch
-#### A touch enabled slider for horizontal navigation
+![Snap Touch](banner.png)
 
+---
+
+A touch enabled slider for horizontal navigation.
 This slider calculates velocity to decelerate when flicked and will snap to an element when finished.
 
 [View demo](https://jabes.github.io/snap-touch/)
