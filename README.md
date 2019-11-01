@@ -1,6 +1,6 @@
-![Snap Touch](banner.png)
+![](banner.png)
 
----
+# Snap Touch
 
 A touch enabled slider for horizontal navigation.
 This slider calculates velocity to decelerate when flicked and will snap to an element when finished.
